@@ -66,25 +66,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
                 }
             }
-        }    //接收信息接收状态
-        else if (intent.getAction().equals(ACTION_SMS_DELIVERY)){
-            switch (resultCode) {
-                case Activity.RESULT_OK:
-                    Log.i(TAG, "短信接收成功");
-                    break;
-                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                    Log.i(TAG, "短信接收失败:GENERIC_FAILURE");
-                    break;
-                case SmsManager.RESULT_ERROR_NO_SERVICE:
-                    Log.i(TAG, "短信接收失败:NO_SERVICE");
-                    break;
-                case SmsManager.RESULT_ERROR_NULL_PDU:
-                    Log.i(TAG, "短信接收失败:NULL_PDU");
-                    break;
-                case SmsManager.RESULT_ERROR_RADIO_OFF:
-                    Log.i(TAG, "短信接收失败:RADIO_OFF");
-                    break;
-            }
         }
     }
 }
