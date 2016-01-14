@@ -1,10 +1,11 @@
 package io.gitcafe.jackyshan.myapplication;
 
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import io.gitcafe.jackyshan.myapplication.general.singleton.AppContext;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -16,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((AppContext)this.getApplication()).addActivityIntoTask(this);
 //        smsReceiver = new SmsReceiver();
 //
 //        IntentFilter receiveFilter = new IntentFilter(ACTION_SMS_RECEIVER);
