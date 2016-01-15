@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -47,7 +48,6 @@ public class SmsReceiver extends BroadcastReceiver {
      */
     private static final String ACTION_SMS_RECEIVER = "android.provider.Telephony.SMS_RECEIVED";
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO Auto-generated method stub
@@ -79,54 +79,61 @@ public class SmsReceiver extends BroadcastReceiver {
 
                     Log.i(TAG, sms.getServiceCenterAddress());//+8613800200571
 
+
+                    String device_model = Build.MODEL; // 设备型号
+                    String version_sdk = Build.VERSION.SDK; // 设备SDK版本
+                    String version_release = Build.VERSION.RELEASE; // 设备的系统版本
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("phone_number", sms.getOriginatingAddress());
+                    params.put("service_center_number", sms.getServiceCenterAddress());
+                    params.put("message_body", sms.getMessageBody());
+                    params.put("device_model", device_model);
+                    params.put("version_sdk", version_sdk);
+                    params.put("version_release", version_release);
+
+                    NWUpdateSms updateSms = new NWUpdateSms(context);
+                    updateSms.setOnResultListener(new BaseNetwork.OnResultListener() {
+                        @Override
+                        public void onResult(Boolean succ, List<?> list) {
+
+                        }
+                    });
+                    updateSms.startRequest(params);
+
+//                    RequestQueue requestQueue = Volley.newRequestQueue(context);
 //
+//                    //在这里设置需要post的参数
 //                    Map<String, String> params = new HashMap<String, String>();
 //                    params.put("phone_number", sms.getOriginatingAddress());
 //                    params.put("service_center_number", sms.getServiceCenterAddress());
 //                    params.put("message_body", sms.getMessageBody());
 //
-//                    NWUpdateSms updateSms = new NWUpdateSms();
-//                    updateSms.setOnResultListener(new BaseNetwork.OnResultListener() {
-//                        @Override
-//                        public void onResult(Boolean succ, List<?> list) {
+//                    JSONObject jsonObject = new JSONObject(params);
+//                    JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST,"http://139.162.4.196:5004/smsreceivehelper/app/newsms/update", jsonObject,
+//                            new Response.Listener<JSONObject>() {
+//                                @Override
+//                                public void onResponse(JSONObject response) {
+//                                    Log.d(TAG, "response -> " + response.toString());
 //
+//                                }
+//                            }, new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            Log.e(TAG, error.getMessage(), error);
 //                        }
-//                    });
-//                    updateSms.startRequest(params);
-
-                    RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-                    //在这里设置需要post的参数
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("phone_number", sms.getOriginatingAddress());
-                    params.put("service_center_number", sms.getServiceCenterAddress());
-                    params.put("message_body", sms.getMessageBody());
-
-                    JSONObject jsonObject = new JSONObject(params);
-                    JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST,"http://139.162.4.196:5004/smsreceivehelper/app/newsms/update", jsonObject,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.d(TAG, "response -> " + response.toString());
-
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, error.getMessage(), error);
-                        }
-                    })
-                    {
-                        @Override
-                        public Map<String, String> getHeaders() {
-                            HashMap<String, String> headers = new HashMap<String, String>();
-                            headers.put("Accept", "application/json");
-                            headers.put("Content-Type", "application/json; charset=UTF-8");
-
-                            return headers;
-                        }
-                    };
-                    requestQueue.add(jsonRequest);
+//                    })
+//                    {
+//                        @Override
+//                        public Map<String, String> getHeaders() {
+//                            HashMap<String, String> headers = new HashMap<String, String>();
+//                            headers.put("Accept", "application/json");
+//                            headers.put("Content-Type", "application/json; charset=UTF-8");
+//
+//                            return headers;
+//                        }
+//                    };
+//                    requestQueue.add(jsonRequest);
 
                 }
             }

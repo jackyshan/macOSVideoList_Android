@@ -28,10 +28,12 @@ public class BaseNetwork extends BaseObject {
     //变量
     private String host = AppConfig.host;
 
-    public Context context;
-
     //初始化
     public BaseNetwork() {
+        queue = Volley.newRequestQueue(AppContext.getInstance().getTheTopActivity());
+    }
+
+    public BaseNetwork(Context context) {
         queue = Volley.newRequestQueue(context != null?context:AppContext.getInstance().getTheTopActivity());
     }
 
@@ -78,8 +80,9 @@ public class BaseNetwork extends BaseObject {
 
         //网络请求
         logMsg("-----------网络请求开始-----------");
-        logMsg("网络请求参数:\n" + builder.toString());
+//        logMsg("网络请求参数:\n" + builder.toString());
         JSONObject jsonObject = new JSONObject(params);
+        logMsg("网络请求参数:\n" + jsonObject);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, builder.toString(), jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
