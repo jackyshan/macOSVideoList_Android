@@ -4,7 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <EditText
@@ -22,6 +25,7 @@
     <Button
         android:id="@+id/btn"
         android:text="播放列表"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
     <FrameLayout

@@ -3,12 +3,14 @@ package io.gitcafe.jackyshan.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,11 +49,18 @@ public class WebViewActivity extends Activity {
         final String url = intent.getStringExtra("url");
 
         final EditText editText = (EditText) findViewById(R.id.edittext);
+
+        SharedPreferences sp=getSharedPreferences("data",MODE_PRIVATE);
+        String input = sp.getString("default_url",null);//第二个参数是为空的默认信息
+
+        if (input != null) {
+            editText.setText(input);
+        }
+
         if (url != null) {
             webview.loadUrl(url);
         }
         else {
-
             webview.loadUrl(editText.getText().toString());
         }
 
@@ -60,6 +69,15 @@ public class WebViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 webview.loadUrl(editText.getText().toString());
+
+                SharedPreferences.Editor editor=getSharedPreferences("data",MODE_PRIVATE).edit();
+                editor.putString("default_url",editText.getText().toString());
+                editor.commit();
+
+                InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                webview.requestFocus();
             }
         });
 
