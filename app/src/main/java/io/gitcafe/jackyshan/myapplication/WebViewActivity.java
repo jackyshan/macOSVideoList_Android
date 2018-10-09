@@ -35,6 +35,7 @@ public class WebViewActivity extends Activity {
     private List<String> list = new ArrayList<String>();
 
     private HelloArrayAdapter mAdapter;
+    private  EditText eeditxt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class WebViewActivity extends Activity {
         final String url = intent.getStringExtra("url");
 
         final EditText editText = (EditText) findViewById(R.id.edittext);
+        eeditxt = editText;
 
         SharedPreferences sp=getSharedPreferences("data",MODE_PRIVATE);
         String input = sp.getString("default_url",null);//第二个参数是为空的默认信息
@@ -229,6 +231,9 @@ public class WebViewActivity extends Activity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+
+            InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(eeditxt.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             String js = "function getUrls(){"+
                     "var objs = document.getElementsByTagName(\"a\");"+
